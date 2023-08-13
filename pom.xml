@@ -10,6 +10,7 @@
   <name>study</name>
   <modules>
     <module>rocketmq</module>
+    <module>code</module>
   </modules>
 
 
