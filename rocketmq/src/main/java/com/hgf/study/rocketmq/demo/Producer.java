@@ -18,7 +18,7 @@ public class Producer implements CommandLineRunner {
     private MessageChannel output1; // 获取name为output的binding
 
     public void produce(){
-        output1.send(MessageBuilder.withPayload("test").build());
+        output1.send(MessageBuilder.withPayload("test1").setHeader("test", "1").build());
     }
 
     @Override
