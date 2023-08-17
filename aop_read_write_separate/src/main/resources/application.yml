@@ -1,0 +1,14 @@
+server:
+  port: 8001
+spring:
+  datasource:
+    a:
+      username: root
+      password: 123456
+      jdbc-url: jdbc:mysql://101.33.249.245:3306/test?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+      driver-class-name: com.mysql.cj.jdbc.Driver
+    b:
+      username: jfzx_pgsql_test
+      password: jfzx_pgsql_test
+      jdbc-url: jdbc:postgresql://10.0.1.182:5432/v3-2023-project-yongsheng-sbb-dev?stringtype=unspecified
+      driver-class-name: org.postgresql.Driver

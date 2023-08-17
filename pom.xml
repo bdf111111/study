@@ -10,6 +10,7 @@
   <name>study</name>
   <modules>
     <module>rocketmq</module>
+    <module>aop_read_write_separate</module>
   </modules>
 
 
