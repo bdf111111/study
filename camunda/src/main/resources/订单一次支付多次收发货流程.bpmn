@@ -1,0 +1,615 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_0bfb4na" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.5.0">
+  <bpmn:process id="order_pay_one_deliveries" name="订单一次支付多次收发货流程" isExecutable="true">
+    <bpmn:extensionElements>
+      <camunda:properties>
+        <camunda:property name="author" value="万宁" />
+      </camunda:properties>
+    </bpmn:extensionElements>
+    <bpmn:startEvent id="StartEvent_1" name="新增订单">
+      <bpmn:extensionElements>
+        <camunda:properties>
+          <camunda:property name="status" value="0" />
+          <camunda:property name="buyer" value="6" />
+          <camunda:property name="vendor" value="100" />
+          <camunda:property name="outer" value="1" />
+        </camunda:properties>
+      </bpmn:extensionElements>
+      <bpmn:outgoing>Flow_068shjm</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:subProcess id="Activity_1wqx8xk" name="订单发货确认">
+      <bpmn:extensionElements>
+        <camunda:properties>
+          <camunda:property name="step" value="4" />
+          <camunda:property name="status" value="1" />
+          <camunda:property name="roletype" value="1" />
+        </camunda:properties>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_178b56c</bpmn:incoming>
+      <bpmn:outgoing>Flow_16kd518</bpmn:outgoing>
+      <bpmn:startEvent id="Event_1p3vdrl">
+        <bpmn:outgoing>Flow_0f7tbnh</bpmn:outgoing>
+      </bpmn:startEvent>
+      <bpmn:userTask id="Activity_1o9dg5l" name="订单发货">
+        <bpmn:extensionElements>
+          <camunda:properties>
+            <camunda:property name="step" value="1" />
+          </camunda:properties>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_0f7tbnh</bpmn:incoming>
+        <bpmn:incoming>Flow_03ziknl</bpmn:incoming>
+        <bpmn:incoming>Flow_0sp7i7c</bpmn:incoming>
+        <bpmn:outgoing>Flow_192rn4s</bpmn:outgoing>
+      </bpmn:userTask>
+      <bpmn:sequenceFlow id="Flow_0f7tbnh" sourceRef="Event_1p3vdrl" targetRef="Activity_1o9dg5l">
+        <bpmn:extensionElements>
+          <camunda:properties>
+            <camunda:property name="status" value="0" />
+          </camunda:properties>
+        </bpmn:extensionElements>
+      </bpmn:sequenceFlow>
+      <bpmn:exclusiveGateway id="Gateway_15yewdq">
+        <bpmn:incoming>Flow_192rn4s</bpmn:incoming>
+        <bpmn:outgoing>Flow_0bvk2fr</bpmn:outgoing>
+        <bpmn:outgoing>Flow_03ziknl</bpmn:outgoing>
+        <bpmn:outgoing>Flow_0sp7i7c</bpmn:outgoing>
+      </bpmn:exclusiveGateway>
+      <bpmn:endEvent id="Event_1uhgbv5">
+        <bpmn:incoming>Flow_0bvk2fr</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_192rn4s" sourceRef="Activity_1o9dg5l" targetRef="Gateway_15yewdq" />
+      <bpmn:sequenceFlow id="Flow_0bvk2fr" name="发货完成，且只有一次未收货" sourceRef="Gateway_15yewdq" targetRef="Event_1uhgbv5">
+        <bpmn:extensionElements>
+          <camunda:properties>
+            <camunda:property name="status" value="1" />
+            <camunda:property name="buyer" value="16" />
+            <camunda:property name="vendor" value="1000" />
+            <camunda:property name="outer" value="13" />
+          </camunda:properties>
+        </bpmn:extensionElements>
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{agree == 1}</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
+      <bpmn:sequenceFlow id="Flow_03ziknl" name="还有货未发" sourceRef="Gateway_15yewdq" targetRef="Activity_1o9dg5l">
+        <bpmn:extensionElements>
+          <camunda:properties>
+            <camunda:property name="status" value="1" />
+            <camunda:property name="buyer" value="16" />
+            <camunda:property name="vendor" value="118" />
+            <camunda:property name="outer" value="11" />
+          </camunda:properties>
+        </bpmn:extensionElements>
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{agree == 0}</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
+      <bpmn:sequenceFlow id="Flow_0sp7i7c" name="发货完成，大于1次未收货" sourceRef="Gateway_15yewdq" targetRef="Activity_1o9dg5l">
+        <bpmn:extensionElements>
+          <camunda:properties>
+            <camunda:property name="status" value="1" />
+            <camunda:property name="buyer" value="16" />
+            <camunda:property name="vendor" value="1000" />
+            <camunda:property name="outer" value="13" />
+          </camunda:properties>
+        </bpmn:extensionElements>
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{agree == 2}</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
+    </bpmn:subProcess>
+    <bpmn:subProcess id="Activity_11ls6f4" name="订单收货确认">
+      <bpmn:extensionElements>
+        <camunda:properties>
+          <camunda:property name="step" value="5" />
+          <camunda:property name="status" value="2" />
+          <camunda:property name="roletype" value="2" />
+        </camunda:properties>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_16kd518</bpmn:incoming>
+      <bpmn:outgoing>Flow_0p94h8u</bpmn:outgoing>
+      <bpmn:startEvent id="Event_0hmrkl7">
+        <bpmn:outgoing>Flow_1595epu</bpmn:outgoing>
+      </bpmn:startEvent>
+      <bpmn:userTask id="Activity_1nlkbkz" name="订单收货确认">
+        <bpmn:extensionElements>
+          <camunda:properties>
+            <camunda:property name="step" value="1" />
+            <camunda:property name="status" value="1" />
+            <camunda:property name="buyer" value="1000" />
+            <camunda:property name="vendor" value="1000" />
+            <camunda:property name="outer" value="100" />
+          </camunda:properties>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_1595epu</bpmn:incoming>
+        <bpmn:outgoing>Flow_1l0g8va</bpmn:outgoing>
+      </bpmn:userTask>
+      <bpmn:endEvent id="Event_1oqpyrq">
+        <bpmn:incoming>Flow_1l0g8va</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_1595epu" sourceRef="Event_0hmrkl7" targetRef="Activity_1nlkbkz" />
+      <bpmn:sequenceFlow id="Flow_1l0g8va" sourceRef="Activity_1nlkbkz" targetRef="Event_1oqpyrq" />
+    </bpmn:subProcess>
+    <bpmn:sequenceFlow id="Flow_068shjm" sourceRef="StartEvent_1" targetRef="Activity_0ftb8yq" />
+    <bpmn:sequenceFlow id="Flow_16kd518" sourceRef="Activity_1wqx8xk" targetRef="Activity_11ls6f4" />
+    <bpmn:endEvent id="Event_130ddnu">
+      <bpmn:incoming>Flow_0p94h8u</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0p94h8u" sourceRef="Activity_11ls6f4" targetRef="Event_130ddnu" />
+    <bpmn:subProcess id="Activity_0ftb8yq" name="提交订单">
+      <bpmn:extensionElements>
+        <camunda:properties>
+          <camunda:property name="step" value="1" />
+          <camunda:property name="status" value="1" />
+          <camunda:property name="roletype" value="2" />
+          <camunda:property name="pay_start" value="1" />
+          <camunda:property name="pay_end" value="1" />
+        </camunda:properties>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_068shjm</bpmn:incoming>
+      <bpmn:outgoing>Flow_19b1guq</bpmn:outgoing>
+      <bpmn:startEvent id="Event_18olyft">
+        <bpmn:outgoing>Flow_0bn2rwd</bpmn:outgoing>
+      </bpmn:startEvent>
+      <bpmn:userTask id="Activity_1w4rds5" name="提交订单">
+        <bpmn:extensionElements>
+          <camunda:properties>
+            <camunda:property name="step" value="1" />
+            <camunda:property name="status" value="1" />
+            <camunda:property name="buyer" value="10" />
+            <camunda:property name="vendor" value="109" />
+            <camunda:property name="outer" value="6" />
+            <camunda:property name="next_pay" value="1" />
+          </camunda:properties>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_0bn2rwd</bpmn:incoming>
+        <bpmn:outgoing>Flow_16qtxg9</bpmn:outgoing>
+      </bpmn:userTask>
+      <bpmn:endEvent id="Event_1kmpg59">
+        <bpmn:incoming>Flow_16qtxg9</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_16qtxg9" sourceRef="Activity_1w4rds5" targetRef="Event_1kmpg59" />
+      <bpmn:sequenceFlow id="Flow_0bn2rwd" sourceRef="Event_18olyft" targetRef="Activity_1w4rds5">
+        <bpmn:extensionElements>
+          <camunda:properties>
+            <camunda:property name="status" value="0" />
+          </camunda:properties>
+        </bpmn:extensionElements>
+      </bpmn:sequenceFlow>
+    </bpmn:subProcess>
+    <bpmn:subProcess id="Activity_1ndosjt" name="订单支付">
+      <bpmn:extensionElements>
+        <camunda:properties>
+          <camunda:property name="step" value="2" />
+          <camunda:property name="status" value="1" />
+          <camunda:property name="roletype" value="2" />
+          <camunda:property name="pay" value="1" />
+          <camunda:property name="pay_start" value="1" />
+          <camunda:property name="pay_end" value="1" />
+        </camunda:properties>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_19b1guq</bpmn:incoming>
+      <bpmn:incoming>Flow_14bylh4</bpmn:incoming>
+      <bpmn:incoming>Flow_0ixq8jw</bpmn:incoming>
+      <bpmn:outgoing>Flow_15wfw2j</bpmn:outgoing>
+      <bpmn:startEvent id="Event_0vcl0rx">
+        <bpmn:outgoing>Flow_1ngddq8</bpmn:outgoing>
+      </bpmn:startEvent>
+      <bpmn:userTask id="Activity_01gx2rt" name="订单支付">
+        <bpmn:extensionElements>
+          <camunda:properties>
+            <camunda:property name="step" value="1" />
+          </camunda:properties>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_1ngddq8</bpmn:incoming>
+        <bpmn:incoming>Flow_1totcs1</bpmn:incoming>
+        <bpmn:outgoing>Flow_0yk785i</bpmn:outgoing>
+      </bpmn:userTask>
+      <bpmn:sequenceFlow id="Flow_1ngddq8" sourceRef="Event_0vcl0rx" targetRef="Activity_01gx2rt">
+        <bpmn:extensionElements>
+          <camunda:properties>
+            <camunda:property name="status" value="0" />
+          </camunda:properties>
+        </bpmn:extensionElements>
+      </bpmn:sequenceFlow>
+      <bpmn:exclusiveGateway id="Gateway_07ptw5a">
+        <bpmn:incoming>Flow_0yk785i</bpmn:incoming>
+        <bpmn:outgoing>Flow_1p9azrb</bpmn:outgoing>
+        <bpmn:outgoing>Flow_1totcs1</bpmn:outgoing>
+      </bpmn:exclusiveGateway>
+      <bpmn:endEvent id="Event_1tsk2oh">
+        <bpmn:incoming>Flow_1p9azrb</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_1p9azrb" name="支付成功" sourceRef="Gateway_07ptw5a" targetRef="Event_1tsk2oh">
+        <bpmn:extensionElements>
+          <camunda:properties>
+            <camunda:property name="status" value="1" />
+            <camunda:property name="buyer" value="11" />
+            <camunda:property name="vendor" value="109" />
+            <camunda:property name="outer" value="7" />
+            <camunda:property name="next_pay" value="1" />
+          </camunda:properties>
+        </bpmn:extensionElements>
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{agree == 1}</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
+      <bpmn:sequenceFlow id="Flow_0yk785i" sourceRef="Activity_01gx2rt" targetRef="Gateway_07ptw5a" />
+      <bpmn:sequenceFlow id="Flow_1totcs1" name="支付失败" sourceRef="Gateway_07ptw5a" targetRef="Activity_01gx2rt">
+        <bpmn:extensionElements>
+          <camunda:properties>
+            <camunda:property name="status" value="1" />
+            <camunda:property name="buyer" value="12" />
+            <camunda:property name="vendor" value="109" />
+            <camunda:property name="outer" value="6" />
+            <camunda:property name="next_pay" value="1" />
+          </camunda:properties>
+        </bpmn:extensionElements>
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{agree == 0}</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
+    </bpmn:subProcess>
+    <bpmn:sequenceFlow id="Flow_19b1guq" sourceRef="Activity_0ftb8yq" targetRef="Activity_1ndosjt" />
+    <bpmn:subProcess id="Activity_1ppt898" name="确认支付结果">
+      <bpmn:extensionElements>
+        <camunda:properties>
+          <camunda:property name="step" value="3" />
+          <camunda:property name="status" value="1" />
+          <camunda:property name="roletype" value="1" />
+          <camunda:property name="pay" value="1" />
+          <camunda:property name="pay_start" value="1" />
+          <camunda:property name="pay_end" value="1" />
+        </camunda:properties>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_15wfw2j</bpmn:incoming>
+      <bpmn:outgoing>Flow_0hdcanu</bpmn:outgoing>
+      <bpmn:startEvent id="Event_0sdtvvn">
+        <bpmn:outgoing>Flow_07m2ka0</bpmn:outgoing>
+      </bpmn:startEvent>
+      <bpmn:userTask id="Activity_05b6n1b" name="确认支付结果">
+        <bpmn:extensionElements>
+          <camunda:properties>
+            <camunda:property name="step" value="1" />
+          </camunda:properties>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_07m2ka0</bpmn:incoming>
+        <bpmn:outgoing>Flow_1ra7u1u</bpmn:outgoing>
+      </bpmn:userTask>
+      <bpmn:sequenceFlow id="Flow_07m2ka0" sourceRef="Event_0sdtvvn" targetRef="Activity_05b6n1b">
+        <bpmn:extensionElements>
+          <camunda:properties>
+            <camunda:property name="status" value="0" />
+          </camunda:properties>
+        </bpmn:extensionElements>
+      </bpmn:sequenceFlow>
+      <bpmn:exclusiveGateway id="Gateway_0nfi1rv">
+        <bpmn:incoming>Flow_1ra7u1u</bpmn:incoming>
+        <bpmn:outgoing>Flow_1bw3dty</bpmn:outgoing>
+        <bpmn:outgoing>Flow_14matnh</bpmn:outgoing>
+        <bpmn:outgoing>Flow_1nzyzao</bpmn:outgoing>
+      </bpmn:exclusiveGateway>
+      <bpmn:endEvent id="Event_1n3or35">
+        <bpmn:incoming>Flow_1bw3dty</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:endEvent id="Event_1g4r45x">
+        <bpmn:incoming>Flow_14matnh</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_1ra7u1u" sourceRef="Activity_05b6n1b" targetRef="Gateway_0nfi1rv" />
+      <bpmn:sequenceFlow id="Flow_1bw3dty" name="确认已到账且支付完成" sourceRef="Gateway_0nfi1rv" targetRef="Event_1n3or35">
+        <bpmn:extensionElements>
+          <camunda:properties>
+            <camunda:property name="status" value="1" />
+            <camunda:property name="buyer" value="11" />
+            <camunda:property name="vendor" value="118" />
+            <camunda:property name="outer" value="11" />
+          </camunda:properties>
+        </bpmn:extensionElements>
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{agree == 1}</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
+      <bpmn:sequenceFlow id="Flow_14matnh" name="确认未到账" sourceRef="Gateway_0nfi1rv" targetRef="Event_1g4r45x">
+        <bpmn:extensionElements>
+          <camunda:properties>
+            <camunda:property name="status" value="1" />
+            <camunda:property name="buyer" value="11" />
+            <camunda:property name="vendor" value="110" />
+            <camunda:property name="outer" value="8" />
+            <camunda:property name="next_pay" value="1" />
+          </camunda:properties>
+        </bpmn:extensionElements>
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{agree == 0}</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
+      <bpmn:endEvent id="Event_056hnhg">
+        <bpmn:incoming>Flow_1nzyzao</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_1nzyzao" name="确认到账且支付未完成" sourceRef="Gateway_0nfi1rv" targetRef="Event_056hnhg">
+        <bpmn:extensionElements>
+          <camunda:properties>
+            <camunda:property name="status" value="1" />
+            <camunda:property name="buyer" value="10" />
+            <camunda:property name="vendor" value="109" />
+            <camunda:property name="outer" value="6" />
+            <camunda:property name="next_pay" value="1" />
+          </camunda:properties>
+        </bpmn:extensionElements>
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{agree == 2}</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
+    </bpmn:subProcess>
+    <bpmn:sequenceFlow id="Flow_15wfw2j" sourceRef="Activity_1ndosjt" targetRef="Activity_1ppt898" />
+    <bpmn:exclusiveGateway id="Gateway_1sdeie0">
+      <bpmn:incoming>Flow_0hdcanu</bpmn:incoming>
+      <bpmn:outgoing>Flow_178b56c</bpmn:outgoing>
+      <bpmn:outgoing>Flow_14bylh4</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0ixq8jw</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_0hdcanu" sourceRef="Activity_1ppt898" targetRef="Gateway_1sdeie0" />
+    <bpmn:sequenceFlow id="Flow_178b56c" name="确认已到账" sourceRef="Gateway_1sdeie0" targetRef="Activity_1wqx8xk">
+      <bpmn:extensionElements>
+        <camunda:properties>
+          <camunda:property name="status" value="1" />
+          <camunda:property name="buyer" value="11" />
+          <camunda:property name="vendor" value="118" />
+          <camunda:property name="outer" value="11" />
+        </camunda:properties>
+      </bpmn:extensionElements>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{agree == 1}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_14bylh4" name="确认未到账" sourceRef="Gateway_1sdeie0" targetRef="Activity_1ndosjt">
+      <bpmn:extensionElements>
+        <camunda:properties>
+          <camunda:property name="status" value="1" />
+          <camunda:property name="buyer" value="11" />
+          <camunda:property name="vendor" value="110" />
+          <camunda:property name="outer" value="8" />
+        </camunda:properties>
+      </bpmn:extensionElements>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{agree == 0}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0ixq8jw" name="确认到账且支付未完成" sourceRef="Gateway_1sdeie0" targetRef="Activity_1ndosjt">
+      <bpmn:extensionElements>
+        <camunda:properties>
+          <camunda:property name="status" value="1" />
+          <camunda:property name="buyer" value="10" />
+          <camunda:property name="vendor" value="109" />
+          <camunda:property name="outer" value="6" />
+          <camunda:property name="next_pay" value="1" />
+        </camunda:properties>
+      </bpmn:extensionElements>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{agree == 2}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="order_pay_one_deliveries">
+      <bpmndi:BPMNEdge id="Flow_0ixq8jw_di" bpmnElement="Flow_0ixq8jw">
+        <di:waypoint x="1830" y="320" />
+        <di:waypoint x="1830" y="130" />
+        <di:waypoint x="970" y="130" />
+        <di:waypoint x="970" y="210" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1364" y="86" width="77" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_14bylh4_di" bpmnElement="Flow_14bylh4">
+        <di:waypoint x="1830" y="370" />
+        <di:waypoint x="1830" y="530" />
+        <di:waypoint x="949" y="530" />
+        <di:waypoint x="949" y="463" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1364" y="512" width="56" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_178b56c_di" bpmnElement="Flow_178b56c">
+        <di:waypoint x="1855" y="345" />
+        <di:waypoint x="1947" y="345" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1874" y="327" width="56" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0hdcanu_di" bpmnElement="Flow_0hdcanu">
+        <di:waypoint x="1730" y="345" />
+        <di:waypoint x="1805" y="345" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_15wfw2j_di" bpmnElement="Flow_15wfw2j">
+        <di:waypoint x="1186" y="337" />
+        <di:waypoint x="1250" y="337" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_19b1guq_di" bpmnElement="Flow_19b1guq">
+        <di:waypoint x="660" y="337" />
+        <di:waypoint x="712" y="337" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0p94h8u_di" bpmnElement="Flow_0p94h8u">
+        <di:waypoint x="2864" y="337" />
+        <di:waypoint x="2941" y="337" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_16kd518_di" bpmnElement="Flow_16kd518">
+        <di:waypoint x="2427" y="337" />
+        <di:waypoint x="2484" y="337" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_068shjm_di" bpmnElement="Flow_068shjm">
+        <di:waypoint x="198" y="337" />
+        <di:waypoint x="260" y="337" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="162" y="319" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="157" y="365" width="45" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1wqx8xk_di" bpmnElement="Activity_1wqx8xk" isExpanded="true">
+        <dc:Bounds x="1947" y="211" width="480" height="253" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0sp7i7c_di" bpmnElement="Flow_0sp7i7c">
+        <di:waypoint x="2262" y="313" />
+        <di:waypoint x="2262" y="260" />
+        <di:waypoint x="2154" y="260" />
+        <di:waypoint x="2154" y="298" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2079" y="242" width="77" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_03ziknl_di" bpmnElement="Flow_03ziknl">
+        <di:waypoint x="2262" y="363" />
+        <di:waypoint x="2262" y="420" />
+        <di:waypoint x="2154" y="420" />
+        <di:waypoint x="2154" y="380" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2180" y="402" width="56" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0bvk2fr_di" bpmnElement="Flow_0bvk2fr">
+        <di:waypoint x="2287" y="338" />
+        <di:waypoint x="2366" y="338" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2289" y="296" width="77" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_192rn4s_di" bpmnElement="Flow_192rn4s">
+        <di:waypoint x="2204" y="338" />
+        <di:waypoint x="2237" y="338" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0f7tbnh_di" bpmnElement="Flow_0f7tbnh">
+        <di:waypoint x="2034" y="338" />
+        <di:waypoint x="2104" y="338" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_1p3vdrl_di" bpmnElement="Event_1p3vdrl">
+        <dc:Bounds x="1998" y="320" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1o9dg5l_di" bpmnElement="Activity_1o9dg5l">
+        <dc:Bounds x="2104" y="298" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_15yewdq_di" bpmnElement="Gateway_15yewdq" isMarkerVisible="true">
+        <dc:Bounds x="2237" y="313" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1uhgbv5_di" bpmnElement="Event_1uhgbv5">
+        <dc:Bounds x="2366" y="320" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_11ls6f4_di" bpmnElement="Activity_11ls6f4" isExpanded="true">
+        <dc:Bounds x="2484" y="210" width="380" height="253" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1l0g8va_di" bpmnElement="Flow_1l0g8va">
+        <di:waypoint x="2714" y="337" />
+        <di:waypoint x="2786" y="337" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1595epu_di" bpmnElement="Flow_1595epu">
+        <di:waypoint x="2560" y="337" />
+        <di:waypoint x="2614" y="337" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_0hmrkl7_di" bpmnElement="Event_0hmrkl7">
+        <dc:Bounds x="2524" y="319" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1nlkbkz_di" bpmnElement="Activity_1nlkbkz">
+        <dc:Bounds x="2614" y="297" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1oqpyrq_di" bpmnElement="Event_1oqpyrq">
+        <dc:Bounds x="2786" y="319" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_130ddnu_di" bpmnElement="Event_130ddnu">
+        <dc:Bounds x="2941" y="319" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0ftb8yq_di" bpmnElement="Activity_0ftb8yq" isExpanded="true">
+        <dc:Bounds x="260" y="210" width="400" height="253" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0bn2rwd_di" bpmnElement="Flow_0bn2rwd">
+        <di:waypoint x="336" y="337" />
+        <di:waypoint x="406" y="337" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_16qtxg9_di" bpmnElement="Flow_16qtxg9">
+        <di:waypoint x="506" y="337" />
+        <di:waypoint x="572" y="337" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_18olyft_di" bpmnElement="Event_18olyft">
+        <dc:Bounds x="300" y="319" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1w4rds5_di" bpmnElement="Activity_1w4rds5">
+        <dc:Bounds x="406" y="297" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1kmpg59_di" bpmnElement="Event_1kmpg59">
+        <dc:Bounds x="572" y="319" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1ndosjt_di" bpmnElement="Activity_1ndosjt" isExpanded="true">
+        <dc:Bounds x="712" y="210" width="474" height="253" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1totcs1_di" bpmnElement="Flow_1totcs1">
+        <di:waypoint x="1034" y="362" />
+        <di:waypoint x="1034" y="408" />
+        <di:waypoint x="908" y="408" />
+        <di:waypoint x="908" y="378" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="949" y="390" width="45" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0yk785i_di" bpmnElement="Flow_0yk785i">
+        <di:waypoint x="958" y="337" />
+        <di:waypoint x="1009" y="337" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1p9azrb_di" bpmnElement="Flow_1p9azrb">
+        <di:waypoint x="1059" y="337" />
+        <di:waypoint x="1118" y="337" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1067" y="319" width="44" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ngddq8_di" bpmnElement="Flow_1ngddq8">
+        <di:waypoint x="788" y="337" />
+        <di:waypoint x="858" y="337" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_0vcl0rx_di" bpmnElement="Event_0vcl0rx">
+        <dc:Bounds x="752" y="319" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_01gx2rt_di" bpmnElement="Activity_01gx2rt">
+        <dc:Bounds x="858" y="297" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_07ptw5a_di" bpmnElement="Gateway_07ptw5a" isMarkerVisible="true">
+        <dc:Bounds x="1009" y="312" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1tsk2oh_di" bpmnElement="Event_1tsk2oh">
+        <dc:Bounds x="1118" y="319" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1ppt898_di" bpmnElement="Activity_1ppt898" isExpanded="true">
+        <dc:Bounds x="1250" y="210" width="480" height="253" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1nzyzao_di" bpmnElement="Flow_1nzyzao">
+        <di:waypoint x="1560" y="312" />
+        <di:waypoint x="1560" y="260" />
+        <di:waypoint x="1672" y="260" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1571" y="226" width="77" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_14matnh_di" bpmnElement="Flow_14matnh">
+        <di:waypoint x="1560" y="362" />
+        <di:waypoint x="1560" y="420" />
+        <di:waypoint x="1672" y="420" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1532" y="433" width="56" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1bw3dty_di" bpmnElement="Flow_1bw3dty">
+        <di:waypoint x="1585" y="337" />
+        <di:waypoint x="1672" y="337" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1591" y="306" width="77" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ra7u1u_di" bpmnElement="Flow_1ra7u1u">
+        <di:waypoint x="1496" y="337" />
+        <di:waypoint x="1535" y="337" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_07m2ka0_di" bpmnElement="Flow_07m2ka0">
+        <di:waypoint x="1330" y="337" />
+        <di:waypoint x="1396" y="337" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_0sdtvvn_di" bpmnElement="Event_0sdtvvn">
+        <dc:Bounds x="1294" y="319" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_05b6n1b_di" bpmnElement="Activity_05b6n1b">
+        <dc:Bounds x="1396" y="297" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0nfi1rv_di" bpmnElement="Gateway_0nfi1rv" isMarkerVisible="true">
+        <dc:Bounds x="1535" y="312" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1n3or35_di" bpmnElement="Event_1n3or35">
+        <dc:Bounds x="1672" y="319" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1g4r45x_di" bpmnElement="Event_1g4r45x">
+        <dc:Bounds x="1672" y="402" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_056hnhg_di" bpmnElement="Event_056hnhg">
+        <dc:Bounds x="1672" y="242" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1sdeie0_di" bpmnElement="Gateway_1sdeie0" isMarkerVisible="true">
+        <dc:Bounds x="1805" y="320" width="50" height="50" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
