@@ -11,6 +11,7 @@
   <modules>
     <module>rocketmq</module>
     <module>aop_read_write_separate</module>
+    <module>camunda</module>
   </modules>
 
 
