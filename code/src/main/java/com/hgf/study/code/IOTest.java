@@ -1,9 +1,6 @@
 package com.hgf.study.code;
 
 import java.io.*;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.SocketChannel;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -14,7 +11,6 @@ import java.util.Scanner;
  */
 public class IOTest {
     public static void main(String[] args) {
-        in = new int[0];
         Scanner scanner = new Scanner(System.in);
         String str = scanner.nextLine();
         File a = new File("a.txt");
