@@ -12,3 +12,21 @@ spring:
       password: jfzx_pgsql_test
       jdbc-url: jdbc:postgresql://10.0.1.182:5432/v3-2023-project-yongsheng-sbb-dev?stringtype=unspecified
       driver-class-name: org.postgresql.Driver
+
+# 性能监控端点配置
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    enabled-by-default: true
+    web:
+      base-path: /actuator
+      exposure:
+        include: '*'
+  metrics:
+    tags:
+      application: 'readwrite'
+    export:
+      prometheus:
+        enabled: true
