@@ -2,7 +2,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.hgf.study.rocketmq</groupId>
+  <groupId>com.hgf.study</groupId>
   <artifactId>rocketmq</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
@@ -10,7 +10,7 @@
   <name>rocketmq</name>
 
   <parent>
-    <groupId>com.hgf.study</groupId>
+    <groupId>com.hgf</groupId>
     <artifactId>study</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>

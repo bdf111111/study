@@ -1,0 +1,87 @@
+spring:
+  application:
+    name: sharding_phere   #唯一名称
+#  读写分离
+#  shardingsphere:
+#    props:
+#      sql-show: true
+#    mode:
+#      type: Memory
+#    datasource:
+#      names: write-ds,read-ds-0
+#      write-ds:
+#        type: com.zaxxer.hikari.HikariDataSource
+#        username: root
+#        password: 123456
+#        jdbc-url: jdbc:mysql://101.33.249.245:3306/test?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+#        driver-class-name: com.mysql.cj.jdbc.Driver
+#      read-ds-0:
+#        type: com.zaxxer.hikari.HikariDataSource
+#        username: root
+#        password: 123456
+#        jdbc-url: jdbc:mysql://101.33.249.245:3307/test?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+#        driver-class-name: com.mysql.cj.jdbc.Driver
+#    # 规则
+#    rules:
+#      readwrite-splitting:
+#        data-sources:
+#          test:
+#            type: Static
+#            props:
+#              write-data-source-name: write-ds
+#              read-data-source-names: read-ds-0
+
+  # 一个实体类对应两张表，覆盖
+  main:
+    allow-bean-definition-overriding:
+     true
+  shardingsphere:
+    props:
+      sql-show: true
+    mode:
+      type: Memory
+    datasource:
+      names: m1,m2
+      m1:
+        type: com.zaxxer.hikari.HikariDataSource
+        username: root
+        password: 123456
+        jdbc-url: jdbc:mysql://101.33.249.245:3306/edu_1?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+        driver-class-name: com.mysql.cj.jdbc.Driver
+      m2:
+        type: com.zaxxer.hikari.HikariDataSource
+        username: root
+        password: 123456
+        jdbc-url: jdbc:mysql://101.33.249.245:3307/edu_2?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+        driver-class-name: com.mysql.cj.jdbc.Driver
+    # 指定数据库分布的情况和数据表分布的情况
+    # m1 m2   course_1 course_2
+    rules:
+      sharding:
+        sharding-algorithms:
+          datasource-sharding:
+            type: inline
+            props:
+              algorithm-expression: m$->{cid % 2 + 1}
+          table-sharding:
+            type: inline
+            props:
+              algorithm-expression: course_$->{cid % 2 + 1}
+        key-generators:
+          snowflake:
+            type: SNOWFLAKE
+        tables:
+          course:
+            actual-data-nodes:
+              m$->{1..2}.course_$->{1..2}
+            key-generate-strategy:
+              column: cid
+              key-generator-name: snowflake
+            database-strategy:
+              standard:
+                sharding-column: cid
+                sharding-algorithm-name: datasource-sharding
+            table-strategy:
+              standard:
+                sharding-column: cid
+                sharding-algorithm-name: table-sharding

@@ -2,7 +2,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.hgf.study</groupId>
+  <groupId>com.hgf</groupId>
   <artifactId>study</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
@@ -13,6 +13,7 @@
     <module>code</module>
     <module>aop_read_write_separate</module>
     <module>camunda</module>
+    <module>shardings_phere</module>
   </modules>
 
 

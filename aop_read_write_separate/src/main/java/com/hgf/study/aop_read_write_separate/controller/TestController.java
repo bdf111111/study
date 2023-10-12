@@ -1,8 +1,7 @@
 package com.hgf.study.aop_read_write_separate.controller;
 
-import com.hgf.study.aop_read_write_separate.config.A;
-import com.hgf.study.aop_read_write_separate.entity.Test;
 import com.hgf.study.aop_read_write_separate.mapper.TestMapper;
+import com.hgf.study.aop_read_write_separate.entity.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

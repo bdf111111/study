@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hgf.study.shardings_phere.mapper.CourseMapper">
+
+    <resultMap id="BaseResultMap" type="com.hgf.study.shardings_phere.entity.Course">
+            <id property="cid" column="cid" jdbcType="BIGINT"/>
+            <result property="cname" column="cname" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        cid,cname
+    </sql>
+    <select id="findByCid" resultType="com.hgf.study.shardings_phere.entity.Course">
+        select * from course where cid = #{cid} limit 1
+    </select>
+</mapper>
