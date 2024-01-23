@@ -14,6 +14,8 @@
     <module>aop_read_write_separate</module>
     <module>camunda</module>
     <module>shardings_phere</module>
+    <module>flink</module>
+    <module>easy_web</module>
   </modules>
 
 
