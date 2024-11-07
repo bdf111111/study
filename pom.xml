@@ -16,6 +16,7 @@
     <module>shardings_phere</module>
     <module>flink</module>
     <module>easy_web</module>
+    <module>tool</module>
   </modules>
 
 
