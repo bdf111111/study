@@ -138,6 +138,10 @@ public class FileController {
         } catch (IOException e) {
             log.error("Export csv failed: ", e);
             throw new RuntimeException("导出Csv失败", e);
+        } finally {
+            if (!file.delete()) {
+                log.error("删除本地文件失败：{}", file.getAbsolutePath());
+            }
         }
     }
 
