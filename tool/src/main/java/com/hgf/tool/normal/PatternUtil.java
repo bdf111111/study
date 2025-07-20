@@ -10,13 +10,6 @@ import java.util.regex.Pattern;
  */
 public class PatternUtil {
 
-    private PatternUtil() {
-    }
-
-    public static final Pattern NUMBER_REGEX = Pattern.compile(RegexConstant.NUMERICAL_REG);
-
-    public static final Pattern PURE_NUMBER_REGEX = Pattern.compile(RegexConstant.PURE_NUMBER_REG);
-
     /**
      * 是否為純數字字符串
      *
@@ -24,7 +17,7 @@ public class PatternUtil {
      * @return 返回校驗結果
      */
     public static Boolean isNumberString(String value) {
-        return PURE_NUMBER_REGEX.matcher(value).matches();
+        return doVerify(RegexConstant.NUMERICAL_REG, value);
     }
 
     /**
@@ -34,7 +27,51 @@ public class PatternUtil {
      * @return 返回校驗結果
      */
     public static Boolean isDecimalNumberString(String value) {
-        return null != value && NUMBER_REGEX.matcher(value).matches();
+        return doVerify(RegexConstant.PURE_NUMBER_REG, value);
+    }
+
+    /**
+     * 校验手机号
+     *
+     * @param mobile 手机号
+     * @return 校验通过返回true，否则返回false
+     */
+    public static boolean isMobile(String mobile) {
+        return doVerify(RegexConstant.CN_PHONE_NUMBER_REG, mobile);
+    }
+
+    /**
+     * 校验邮箱
+     *
+     * @param email 邮箱
+     * @return 校验通过返回true，否则返回false
+     */
+    public static boolean isEmail(String email) {
+        return doVerify(RegexConstant.EMAIL_REG, email);
+    }
+
+    /**
+     * 校验汉字
+     *
+     * @param chinese 中文
+     * @return 校验通过返回true，否则返回false
+     */
+    public static boolean isChinese(String chinese) {
+        return doVerify(RegexConstant.CHINESE_REG, chinese);
+    }
+
+    /**
+     * 正则校验
+     *
+     * @param regularExpression 正则表达式
+     * @param data              待检查数据
+     * @return 校验通过返回true，否则返回false
+     */
+    public static boolean doVerify(String regularExpression, String data) {
+        if (StringUtil.isEmpty(regularExpression) || StringUtil.isEmpty(data)) {
+            return false;
+        }
+        return Pattern.matches(regularExpression, data);
     }
 
 }
