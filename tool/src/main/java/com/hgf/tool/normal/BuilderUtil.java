@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
+ * 构建对象工具类
  * @author huanggf
  * @date 2024/12/2
  */

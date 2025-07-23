@@ -1,4 +1,4 @@
-package com.hgf.study.easy_web.simple;
+package com.hgf.tool.normal;
 
 import java.util.List;
 

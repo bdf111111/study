@@ -17,6 +17,7 @@ import java.util.EnumMap;
 import java.util.Map;
 
 /**
+ * 二维码工具类
  * @author huanggf
  * @date 2024/11/26
  */

@@ -8,6 +8,7 @@ import java.util.Currency;
 import java.util.Objects;
 
 /**
+ * 金额工具类
  * @author huanggf
  * @date 2024/11/29
  */
